@@ -5,13 +5,13 @@ export class Content {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ length: 100, name: "title" })
     title: string;
 
-    @Column()
+    @Column({ length: 100, name: "keywords" })
     keywords: string;
 
-    @Column()
+    @Column({ name: "card_ids", type: 'text' })
     card_ids: string;
 }
   
