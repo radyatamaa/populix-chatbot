@@ -4,6 +4,7 @@ import {
   BookController,
   AuthorController,
   GenreController,
+  WebhookController,
 } from './controllers';
 import { DataServicesModule } from './services/data-services/data-services.module';
 import { BookUseCasesModule } from './use-cases/book/book-use-cases.module';
@@ -17,13 +18,14 @@ import { CrmServicesModule } from './services/crm-services/crm-services.module';
     BookUseCasesModule,
     AuthorUseCasesModule,
     GenreUseCasesModule,
-    CrmServicesModule,
+    CrmServicesModule
   ],
   controllers: [
     AppController,
     BookController,
     AuthorController,
     GenreController,
+    WebhookController,
   ],
   providers: [],
 })
