@@ -56,14 +56,6 @@ export class WebhookUseCases {
         }
 
         content = await this.dataServices.contents.getAll({
-            // where: {
-            //     // [Op.and]: [
-            //     //     sequelizeFn('FIND_IN_SET', requestBody.message.text.toLowerCase(), sequelizeCol('keywords'))
-            //     //   ],
-            //     keywords: {
-            //         contains: requestBody.message.text.toLowerCase()
-            //     }
-            // }
             where: {
                 keywords: Like(`%${requestBody.message.text.toLowerCase()}%`)
               }
