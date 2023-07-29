@@ -1,5 +1,5 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository,Entity } from 'typeorm';
 import { IDataMysqlServices } from '../../../core';
 import { MysqlGenericRepository } from './mysql-generic-repository';
@@ -20,13 +20,13 @@ export class MysqlDataServices
   cardTypes: MysqlGenericRepository<CardType>;
 
   constructor(
-    @InjectModel(Customer)
+    @InjectRepository(Customer)
     private CustomerRepository: Repository<Customer>,
-    @InjectModel(Content)
+    @InjectRepository(Content)
     private ContentRepository: Repository<Content>,
-    @InjectModel(Card)
+    @InjectRepository(Card)
     private CardRepository: Repository<Card>,
-    @InjectModel(CardType)
+    @InjectRepository(CardType)
     private CardTypeRepository: Repository<CardType>,
   ) {}
 

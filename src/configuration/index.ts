@@ -9,7 +9,10 @@ const {
   MYSQL_PASSWORD,
   MYSQL_CHARSET ,
   CLEAN_NEST_MONGO_CONNECTION_STRING,
-  APP_PORT
+  APP_PORT,
+  CONTENT_WELCOME_MESSAGE_CONTENT_ID,
+  CONTENT_DEFAULT_RESPONSE_CONTENT_ID,
+  TELEGRAM_TOKEN_BOT,
 } = process.env
 
 export const DATA_BASE_CONFIGURATION = {
@@ -28,4 +31,13 @@ export const MYSQL_CONFIGURATION = {
 
 export const APP = {
   port: APP_PORT
+};
+
+export const CONTENT = {
+  welcomeMessageContentId: CONTENT_WELCOME_MESSAGE_CONTENT_ID,
+  defaultResponseContentId: CONTENT_DEFAULT_RESPONSE_CONTENT_ID,
+};
+
+export const TELEGRAM = {
+  token: TELEGRAM_TOKEN_BOT,
 };

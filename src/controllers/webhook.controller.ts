@@ -1,9 +1,10 @@
 import { Controller, Get, Param, Post, Body, Put } from '@nestjs/common';
+import { WebhookUseCases } from 'src/use-cases/webhook/webhook.use-case';
 import { RequestWebhookDto } from '../core/dtos';
 
 @Controller('api/webhook')
 export class WebhookController {
-  constructor() {}
+  constructor(private webhookUseCases: WebhookUseCases) {}
 
   @Get()
   getWebhookConnected(): string {
@@ -11,8 +12,9 @@ export class WebhookController {
   }
 
   @Post()
-  createAuthor(@Body() requestBody: RequestWebhookDto) {
+  async postWebhook(@Body() requestBody: RequestWebhookDto) {
     console.log(requestBody)
+    const handle = await this.webhookUseCases.handle(requestBody);
     return true;
   }
 }

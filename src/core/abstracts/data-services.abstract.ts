@@ -1,5 +1,5 @@
 import { Author, Book, Genre, Customer, Content,Card,CardType } from '../entities';
-import { IGenericRepository } from './generic-repository.abstract';
+import { IGenericMysqlRepository, IGenericRepository } from './generic-repository.abstract';
 
 export abstract class IDataServices {
   abstract authors: IGenericRepository<Author>;
@@ -11,11 +11,11 @@ export abstract class IDataServices {
 
 export abstract class IDataMysqlServices {
 
-  abstract customers: IGenericRepository<Customer>;
+  abstract customers: IGenericMysqlRepository<Customer>;
 
-  abstract contents: IGenericRepository<Content>;
+  abstract contents: IGenericMysqlRepository<Content>;
 
-  abstract cards: IGenericRepository<Card>;
+  abstract cards: IGenericMysqlRepository<Card>;
 
-  abstract cardTypes: IGenericRepository<CardType>;
+  abstract cardTypes: IGenericMysqlRepository<CardType>;
 }

@@ -1,7 +1,7 @@
 import { Repository,Entity } from 'typeorm';
-import { IGenericRepository } from '../../../core';
+import { IGenericMysqlRepository } from '../../../core';
 
-export class MysqlGenericRepository<T> implements IGenericRepository<T> {
+export class MysqlGenericRepository<T> implements IGenericMysqlRepository<T> {
   private _repository: Repository<T>;
   private _populateOnFind: string[];
 
@@ -10,16 +10,22 @@ export class MysqlGenericRepository<T> implements IGenericRepository<T> {
     this._populateOnFind = populateOnFind;
   }
 
-  async getAll(): Promise<T[]> {
-    return this._repository.find();
+  async getAll(filters?: any): Promise<T[]> {
+    return this._repository.find(filters);
+  }
+
+  async getWithFilter(filters: any): Promise<T> {
+    return this._repository.findOne(filters);
   }
 
   async get(id: any): Promise<T> {
-    return this._repository.findOneBy(id);
+    return this._repository.findOneBy({
+      id: id,
+  } as any);
   }
 
   async create(item: T): Promise<T> {
-    return this._repository.create(item);
+    return this._repository.save(item);
   }
 
   async update(id: string, item: T) {

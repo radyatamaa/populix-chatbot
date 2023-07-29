@@ -11,6 +11,8 @@ import { BookUseCasesModule } from './use-cases/book/book-use-cases.module';
 import { AuthorUseCasesModule } from './use-cases/author/author-use-cases.module';
 import { GenreUseCasesModule } from './use-cases/genre/genre-use-cases.module';
 import { CrmServicesModule } from './services/crm-services/crm-services.module';
+import { CardManagerUseCasesModule } from './use-cases/card-manager/card-manager-cases.module';
+import { WebhookUseCasesModule } from './use-cases/webhook/webhook-cases.module';
 
 @Module({
   imports: [
@@ -18,7 +20,9 @@ import { CrmServicesModule } from './services/crm-services/crm-services.module';
     BookUseCasesModule,
     AuthorUseCasesModule,
     GenreUseCasesModule,
-    CrmServicesModule
+    CrmServicesModule,
+    CardManagerUseCasesModule,
+    WebhookUseCasesModule,
   ],
   controllers: [
     AppController,
