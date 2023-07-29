@@ -12,4 +12,4 @@ import { TheMovieDbAPIService } from './themoviedb-service.service';
   ],
   exports: [ITheMovieDbAPIServices],
 })
-export class TelegrambotServicesModule {}
+export class TheMovieDbAPIServicesModule {}

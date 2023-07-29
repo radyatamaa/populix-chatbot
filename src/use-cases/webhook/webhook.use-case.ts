@@ -40,7 +40,7 @@ export class WebhookUseCases {
         if (customer.currentFormRealm) {
             const currentFormRealm = JSON.parse(customer.currentFormRealm) as CurrentFormRealm;
             const cards = await this.dataServices.cards.get( String(currentFormRealm.card_id));
-            const send = await this.cardManagerUsecase.send([cards],customer, { answerFormBuilder: requestBody.message.text} as Options);
+            await this.cardManagerUsecase.send([cards],customer, { answerFormBuilder: requestBody.message.text} as Options);
             return;
         }
 
@@ -51,13 +51,18 @@ export class WebhookUseCases {
             cards = await this.cardManagerUsecase.getContentCards(welcomeContentId,{
                 contentId: welcomeContentId
             })
-            const send = await this.cardManagerUsecase.send(cards,customer);
+            await this.cardManagerUsecase.send(cards,customer);
             return;
+        }
+
+        let textPhase = requestBody.message.text;
+        if (textPhase.toLowerCase().includes('Check'.toLowerCase())) {
+            textPhase = 'Check';
         }
 
         content = await this.dataServices.contents.getAll({
             where: {
-                keywords: Like(`%${requestBody.message.text.toLowerCase()}%`)
+                keywords: Like(`%${textPhase.toLowerCase()}%`)
               }
         });
 
@@ -79,7 +84,9 @@ export class WebhookUseCases {
             }
         })
 
-        const send = await this.cardManagerUsecase.send(cards,customer);
+        await this.cardManagerUsecase.send(cards,customer,{
+            textPhase: requestBody.message.text
+        } as Options);
 
 
     }

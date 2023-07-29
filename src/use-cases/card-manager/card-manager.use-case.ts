@@ -1,20 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { Card, CurrentFormRealm, Customer, FormBuilder, FormBuilderSaveToCustomer, Options } from '../../core/entities';
-import { IDataMysqlServices, ITelegramAPIServices } from '../../core/abstracts';
+import { IDataMysqlServices, ITelegramAPIServices, ITheMovieDbAPIServices } from '../../core/abstracts';
 import { RequestWebhookDto } from '../../core/dtos';
 import { CardManagerFactoryService } from './card-manager-factory.service';
-import { CONTENT } from 'src/configuration';
-import { where } from 'sequelize';
+import { CONTENT, THE_MOVIE_DB } from 'src/configuration';
 import { TelegramMessage } from 'src/core/entities/telegram.entity';
 
 export const TEMPLATE = {
     text:'text',
     formbuilder: 'formbuilder',
-    listmovie: 'listmovie',
-    detailmovie: 'detailmovie',
+    searchmovie: 'searchmovie',
     continuetoblock: 'continuetoblock',
+    listmovielatest: 'listmovielatest',
+    listmovienowplaying: 'listmovienowplaying',
+    listmoviepopular: 'listmoviepopular',
+    listmovietoprated: 'listmovietoprated',
+    listmovieupcoming: 'listmovieupcoming',
   };
-
+export const GENRE_THE_MOVIE = {
+    28:"Action",
+    12:"Adventure",
+    16:"Animation",
+    35:"Comedy",
+    80:"Crime",
+    99:"Documentary",
+    18:"Drama",
+    10751:"Family",
+    14:"Fantasy",
+    36:"History",
+    27:"Horror",
+    10402:"Music",
+    9648:"Mystery",
+    10749:"Romance",
+    878:"Science Fiction",
+    10770:"TV Movie",
+    53:"Thriller",
+    10752:"War",
+    37:"Western"
+}
 export const ATTRIBUTES = {
     customer : [
         {
@@ -46,7 +69,8 @@ export class CardManagerUseCases {
     constructor(
       private dataServices: IDataMysqlServices,
       private cardManagerFactoryService: CardManagerFactoryService,
-      private crmServices: ITelegramAPIServices,
+      private telegramServices: ITelegramAPIServices,
+      private themovieDbServices: ITheMovieDbAPIServices,
     ) {}
 
  async send(cards: Card[],customer: Customer, options? : Options): Promise<any> {
@@ -57,7 +81,7 @@ export class CardManagerUseCases {
     }
     
     for (let i = 0; i < templateCards.length; i++) {
-        const sendMessage = await this.crmServices.sendMessage(templateCards[i]);
+        const sendMessage = await this.telegramServices.sendMessage(templateCards[i]);
     }
 
     return;
@@ -85,18 +109,18 @@ export class CardManagerUseCases {
             cardTemplate = await this.createTemplateFormBuilder(card, customer,options);
            break; 
         } 
-        case TEMPLATE.listmovie: { 
-            cardTemplate = await this.createTemplateText(card, customer);
+        case TEMPLATE.searchmovie: { 
+            cardTemplate = await this.createTemplateSearchMovie(card, customer,options);
             break; 
-         } 
-         case TEMPLATE.detailmovie: { 
-            cardTemplate = await this.createTemplateText(card, customer);
-            break; 
-         } 
-         case TEMPLATE.continuetoblock: { 
+        } 
+        case TEMPLATE.continuetoblock: { 
             cardTemplate = await this.createTemplateContinueBlock(card, customer);
             break; 
-         } 
+        } 
+        case TEMPLATE.listmovielatest: { 
+            cardTemplate = await this.createTemplateText(card, customer);
+            break; 
+        } 
         default: { 
             cardTemplate = await this.createTemplateText(card, customer);
             break
@@ -107,6 +131,36 @@ export class CardManagerUseCases {
     return cardTemplate;
   }
 
+
+  async createTemplateSearchMovie(card: Card, customer: Customer,options? : Options) : Promise<TelegramMessage[]> {
+    const movieName = options?.textPhase.toLowerCase().replace('Check '.toLowerCase(),'');
+    const searchMovie = await this.themovieDbServices.SearchMovie(movieName);
+
+    const result = [] as TelegramMessage[]
+    for (let i = 0; i < searchMovie.results.length; i++){
+        let genres = [];
+
+        for (let ig = 0; ig < searchMovie.results[i].genre_ids.length; ig++){
+            genres.push(GENRE_THE_MOVIE[searchMovie.results[i].genre_ids[ig]]);
+        }
+
+        const text = `TheMovieDB\n
+        Name: ${searchMovie.results[i].title}\n
+        Release Date: ${searchMovie.results[i].release_date}\n
+        Popularity: ${searchMovie.results[i].popularity}\n
+        Genre: ${genres.join(',')}\n
+        Overview: ${searchMovie.results[i].overview}\n
+        Image: ${THE_MOVIE_DB.baseUrlImage}${searchMovie.results[i].backdrop_path}
+        `;
+        const cardTemplate = new TelegramMessage();
+        cardTemplate.chat_id = customer.telegramId;
+        cardTemplate.text = text;
+
+        result.push(cardTemplate);
+    }
+
+    return result;
+  }
 
   async createTemplateFormBuilder(card: Card, customer: Customer, options? : Options) : Promise<TelegramMessage[]> {
 

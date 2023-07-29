@@ -1,5 +1,6 @@
 export class MovieSearchResponse {
     page:number;
+    results:MovieSearchResult[]
     total_pages: number;
     total_results: number;
 }

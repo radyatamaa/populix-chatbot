@@ -22,5 +22,6 @@ export class FormBuilderSaveToCustomer {
 
 export class Options {
     answerFormBuilder: string;
+    textPhase: string;
 }
 

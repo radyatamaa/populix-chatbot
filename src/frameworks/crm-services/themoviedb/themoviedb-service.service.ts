@@ -15,7 +15,11 @@ export class TheMovieDbAPIService implements ITheMovieDbAPIServices {
       .request({
         method: 'GET',
         url: 'https://api.themoviedb.org/3/search/movie?query='+ movieName,
-        headers: {accept: 'application/json', 'content-type': 'application/json'},
+        headers: {
+          accept: 'application/json', 
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
       })
       .then(function (response) {
         result = response.data
