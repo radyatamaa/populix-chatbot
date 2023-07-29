@@ -5,11 +5,8 @@ export class Card {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ length: 100, name: "title" })
-    title: string;
-
-    @Column({ length: 255, name: "description" })
-    description: string;
+    @Column({ name: "subtitle" , type: 'mediumtext'})
+    subtitle: string;
 
     @Column({ length: 100, name: "card_type" })
     cardType: string;
@@ -19,5 +16,11 @@ export class Card {
 
     @Column({ name: "quick_replies" , type: 'text'})
     quickReplies: string;
+
+    @Column({ name: "content_id"})
+    contentId: number;
+
+    @Column({ name: "sort" })
+    sort: number;
 }
   

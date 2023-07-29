@@ -1,9 +1,10 @@
 export class Card {
     id: number;
-    title: string;
-    description: string;
+    subtitle: string;
     cardType: string;
     imageUrl: string;
     quickReplies: string;
+    contentId: number;
+    sort: number;
 }
   

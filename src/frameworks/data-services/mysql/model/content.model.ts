@@ -10,8 +10,5 @@ export class Content {
 
     @Column({ length: 100, name: "keywords" })
     keywords: string;
-
-    @Column({ name: "card_ids", type: 'text' })
-    card_ids: string;
 }
   
