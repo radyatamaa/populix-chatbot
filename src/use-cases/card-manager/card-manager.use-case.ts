@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Card, CurrentFormRealm, Customer, FormBuilder, FormBuilderSaveToCustomer, Options } from '../../core/entities';
-import { IDataMysqlServices, ICrmAPIServices } from '../../core/abstracts';
+import { IDataMysqlServices, ITelegramAPIServices } from '../../core/abstracts';
 import { RequestWebhookDto } from '../../core/dtos';
 import { CardManagerFactoryService } from './card-manager-factory.service';
 import { CONTENT } from 'src/configuration';
@@ -46,7 +46,7 @@ export class CardManagerUseCases {
     constructor(
       private dataServices: IDataMysqlServices,
       private cardManagerFactoryService: CardManagerFactoryService,
-      private crmServices: ICrmAPIServices,
+      private crmServices: ITelegramAPIServices,
     ) {}
 
  async send(cards: Card[],customer: Customer, options? : Options): Promise<any> {

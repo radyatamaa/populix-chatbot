@@ -13,6 +13,9 @@ const {
   CONTENT_WELCOME_MESSAGE_CONTENT_ID,
   CONTENT_DEFAULT_RESPONSE_CONTENT_ID,
   TELEGRAM_TOKEN_BOT,
+  THE_MOVIE_DB_API_BASE_URL_IMAGE,
+  THE_MOVIE_DB_API_TOKEN
+
 } = process.env
 
 export const DATA_BASE_CONFIGURATION = {
@@ -40,4 +43,9 @@ export const CONTENT = {
 
 export const TELEGRAM = {
   token: TELEGRAM_TOKEN_BOT,
+};
+
+export const THE_MOVIE_DB = {
+  token: THE_MOVIE_DB_API_TOKEN,
+  baseUrlImage: THE_MOVIE_DB_API_BASE_URL_IMAGE
 };

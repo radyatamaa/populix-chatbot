@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Book } from '../../../core/entities';
-import { ICrmAPIServices } from '../../../core/abstracts';
+import { ITelegramAPIServices } from '../../../core/abstracts';
 import { TelegramMessage } from 'src/core/entities/telegram.entity';
 import axios from 'axios';
 import { TELEGRAM } from 'src/configuration';
 
 @Injectable()
-export class TelegrambotService implements ICrmAPIServices {
+export class TelegrambotService implements ITelegramAPIServices {
   async sendMessage(message: TelegramMessage): Promise<any> {
     const token = TELEGRAM.token;
     await axios

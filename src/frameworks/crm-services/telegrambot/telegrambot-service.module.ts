@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
-import { ICrmAPIServices } from '../../../core';
+import { ITelegramAPIServices } from '../../../core';
 
 import { TelegrambotService } from './telegrambot-service.service';
 
 @Module({
   providers: [
     {
-      provide: ICrmAPIServices,
+      provide: ITelegramAPIServices,
       useClass: TelegrambotService,
     },
   ],
-  exports: [ICrmAPIServices],
+  exports: [ITelegramAPIServices],
 })
 export class TelegrambotServicesModule {}
