@@ -149,12 +149,14 @@ export class CardManagerUseCases {
         Release Date: ${searchMovie.results[i].release_date}\n
         Popularity: ${searchMovie.results[i].popularity}\n
         Genre: ${genres.join(',')}\n
-        Overview: ${searchMovie.results[i].overview}\n
-        Image: ${THE_MOVIE_DB.baseUrlImage}${searchMovie.results[i].backdrop_path}
+        Overview: ${searchMovie.results[i].overview}
+        <a href='${THE_MOVIE_DB.baseUrlImage}${searchMovie.results[i].backdrop_path}'> ‏ </a>
         `;
+        console.log('text',text)
         const cardTemplate = new TelegramMessage();
         cardTemplate.chat_id = customer.telegramId;
         cardTemplate.text = text;
+        cardTemplate.parse_mode = 'HTML';
 
         result.push(cardTemplate);
     }
