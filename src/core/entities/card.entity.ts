@@ -8,3 +8,19 @@ export class Card {
     sort: number;
 }
   
+export class FormBuilder {
+    completed_message: string;
+    completed_redirect_content_id: number;
+    save_to_customer:FormBuilderSaveToCustomer[];
+}
+
+export class FormBuilderSaveToCustomer {
+    field_name: string;
+    message: string;
+    error_message: string;
+}
+
+export class Options {
+    answerFormBuilder: string;
+}
+

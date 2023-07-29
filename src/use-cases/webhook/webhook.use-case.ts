@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Customer } from '../../core/entities';
+import { CurrentFormRealm, Customer, Options } from '../../core/entities';
 import { IDataMysqlServices } from '../../core/abstracts';
 import { RequestWebhookDto } from '../../core/dtos';
 import { WebhookFactoryService } from './webhook-factory.service';
@@ -26,6 +26,14 @@ export class WebhookUseCases {
         if (!customer){
             createCustomer.createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
             customer = await this.dataServices.customers.create(createCustomer)
+        }
+        
+
+        if (customer.currentFormRealm) {
+            const currentFormRealm = JSON.parse(customer.currentFormRealm) as CurrentFormRealm;
+            const cards = await this.dataServices.cards.get( String(currentFormRealm.card_id));
+            const send = await this.cardManagerUsecase.send([cards],customer, { answerFormBuilder: requestBody.message.text} as Options);
+            return;
         }
 
         let content = null;

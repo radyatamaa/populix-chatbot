@@ -31,5 +31,8 @@ export class Customer {
 
     @Column({ name: "last_conversation", type:'datetime' })
     lastConversation: string;
+
+    @Column({ name: "current_form_realm", type:'text' })
+    currentFormRealm: string;
 }
   

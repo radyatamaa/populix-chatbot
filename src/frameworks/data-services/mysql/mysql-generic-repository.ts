@@ -29,6 +29,6 @@ export class MysqlGenericRepository<T> implements IGenericMysqlRepository<T> {
   }
 
   async update(id: string, item: T) {
-    return this._repository.update(id, item as any);
+    return this._repository.save(item);
   }
 }

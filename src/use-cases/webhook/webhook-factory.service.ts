@@ -14,6 +14,8 @@ export class WebhookFactoryService {
         customer.userName = webhook.message.from.username;
         customer.locale = webhook.message.from.language_code;
         customer.lastConversation =  moment().format('YYYY-MM-DD HH:mm:ss');
+        customer.phoneNumber = '';
+        customer.email = '';
         return customer;
       }
 }
