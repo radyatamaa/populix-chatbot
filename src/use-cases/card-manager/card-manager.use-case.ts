@@ -23,7 +23,7 @@ export class CardManagerUseCases {
     }
 
     for (let i = 0; i < templateCards.length; i++) {
-        const sendMessage = this.crmServices.sendMessage(templateCards[i]);
+        const sendMessage = await this.crmServices.sendMessage(templateCards[i]);
     }
 
     return;

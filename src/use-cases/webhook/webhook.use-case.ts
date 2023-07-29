@@ -42,7 +42,7 @@ export class WebhookUseCases {
                 }
             })
 
-            const send = this.cardManagerUsecase.send(cards,customer);
+            const send = await this.cardManagerUsecase.send(cards,customer);
         }
     }
 

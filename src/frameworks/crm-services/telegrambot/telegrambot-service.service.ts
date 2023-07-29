@@ -7,9 +7,9 @@ import { TELEGRAM } from 'src/configuration';
 
 @Injectable()
 export class TelegrambotService implements ICrmAPIServices {
-  sendMessage(message: TelegramMessage): Promise<any> {
+  async sendMessage(message: TelegramMessage): Promise<any> {
     const token = TELEGRAM.token;
-    axios
+    await axios
       .request({
         method: 'POST',
         url: 'https://api.telegram.org/bot'+ token+'/sendMessage',
