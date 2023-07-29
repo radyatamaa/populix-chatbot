@@ -6,6 +6,14 @@ import { WebhookFactoryService } from './webhook-factory.service';
 import { CONTENT } from '../../configuration';
 import { CardManagerUseCases } from '../card-manager/card-manager.use-case';
 import * as moment from 'moment'
+import {Like} from "typeorm";
+
+const {
+    col: sequelizeCol,
+    fn: sequelizeFn,
+    literal: sequelizeLiteral,
+    Op
+  } = require('sequelize')
 
 @Injectable()
 export class WebhookUseCases {
@@ -40,18 +48,48 @@ export class WebhookUseCases {
         let cards = null;
         if (customer.phoneNumber == "" || customer.email == "") {
             const welcomeContentId = CONTENT.welcomeMessageContentId;
-            content = await this.dataServices.contents.get(welcomeContentId);
-            cards = await this.dataServices.cards.getAll({
-                order: {
-                    sort: "ASC"
-                },
-                where: {
-                    contentId: content.id
-                }
+            cards = await this.cardManagerUsecase.getContentCards(welcomeContentId,{
+                contentId: welcomeContentId
             })
-
             const send = await this.cardManagerUsecase.send(cards,customer);
+            return;
         }
+
+        content = await this.dataServices.contents.getAll({
+            // where: {
+            //     // [Op.and]: [
+            //     //     sequelizeFn('FIND_IN_SET', requestBody.message.text.toLowerCase(), sequelizeCol('keywords'))
+            //     //   ],
+            //     keywords: {
+            //         contains: requestBody.message.text.toLowerCase()
+            //     }
+            // }
+            where: {
+                keywords: Like(`%${requestBody.message.text.toLowerCase()}%`)
+              }
+        });
+
+        if (content.length == 0) {
+            const defaultContent = CONTENT.defaultResponseContentId;
+            cards = await this.cardManagerUsecase.getContentCards(defaultContent,{
+                contentId: defaultContent
+            })
+            const send = await this.cardManagerUsecase.send(cards,customer);
+            return;
+        }
+
+        cards = await this.dataServices.cards.getAll({
+            order: {
+                sort: "ASC"
+            },
+            where: {
+                contentId: content[0].id
+            }
+        })
+
+        const send = await this.cardManagerUsecase.send(cards,customer);
+
+
     }
 
     return;

@@ -62,7 +62,17 @@ export class CardManagerUseCases {
 
     return;
   }
+  async getContentCards(contentId:string, filters: any): Promise<Card[]> {
+    const content = await this.dataServices.contents.get(contentId);
+    const cards = await this.dataServices.cards.getAll({
+            order: {
+                sort: "ASC"
+            },
+            where: filters
+        })
 
+    return cards;
+  }
   async createTemplateCard(card: Card, customer: Customer,options? : Options) : Promise<TelegramMessage[]>{
     const templateType = card.cardType;
     let cardTemplate = null;
@@ -217,7 +227,7 @@ export class CardManagerUseCases {
     return result;
   }
 
- async createTemplateText(card: Card, customer: Customer) : Promise<TelegramMessage[]> {
+  async createTemplateText(card: Card, customer: Customer) : Promise<TelegramMessage[]> {
     const cardTemplate = new TelegramMessage();
     cardTemplate.chat_id = customer.telegramId;
     cardTemplate.text = await this.replaceTextCustomerAttribute(card.subtitle,customer);
