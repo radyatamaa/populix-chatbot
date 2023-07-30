@@ -13,7 +13,6 @@ export class WebhookController {
 
   @Post()
   async postWebhook(@Body() requestBody: any) {
-    console.log(requestBody)
     const handle = await this.webhookUseCases.handle(requestBody);
     return true;
   }
