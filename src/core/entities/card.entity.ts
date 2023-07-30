@@ -25,3 +25,13 @@ export class Options {
     textPhase: string;
 }
 
+export class QuickReply {
+    quick_replies:QuickReplies[]
+}
+
+export class QuickReplies {
+    type: string;
+    label: string;
+    value: string;
+    redirect_content_id:number;
+}

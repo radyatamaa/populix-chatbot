@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Card, CurrentFormRealm, Customer, FormBuilder, FormBuilderSaveToCustomer, Options } from '../../core/entities';
+import { Card, CurrentFormRealm, Customer, FormBuilder, FormBuilderSaveToCustomer, Options, QuickReply } from '../../core/entities';
 import { IDataMysqlServices, ITelegramAPIServices, ITheMovieDbAPIServices } from '../../core/abstracts';
 import { RequestWebhookDto } from '../../core/dtos';
 import { CardManagerFactoryService } from './card-manager-factory.service';
 import { CONTENT, THE_MOVIE_DB } from 'src/configuration';
-import { TelegramMessage } from 'src/core/entities/telegram.entity';
+import { InlineKeyboardQR, PayloadCallbackData, ReplyMarkup, TelegramMessage } from 'src/core/entities/telegram.entity';
 
 export const TEMPLATE = {
     text:'text',
@@ -288,6 +288,25 @@ export class CardManagerUseCases {
     cardTemplate.chat_id = customer.telegramId;
     cardTemplate.text = await this.replaceTextCustomerAttribute(card.subtitle,customer);
     
+    if (card.quickReplies) {
+        const quickReplies = JSON.parse(card.quickReplies) as QuickReply
+        let countQR = 0;
+        const replyMarkup = [[]];
+        for (let i=0; i < quickReplies.quick_replies.length; i++) {
+            countQR++;
+            if (countQR === 3) {
+                replyMarkup.push([]);
+                countQR = 1;
+            }
+
+            replyMarkup[replyMarkup.length - 1].push({
+                text : quickReplies.quick_replies[i].label,
+                callback_data: JSON.stringify({redirect_content_id: quickReplies.quick_replies[i].redirect_content_id, value:quickReplies.quick_replies[i].value} as PayloadCallbackData)
+            } as InlineKeyboardQR);      
+        }
+        cardTemplate.reply_markup = {} as ReplyMarkup
+        cardTemplate.reply_markup.inline_keyboard = replyMarkup;
+    }
     const result = [cardTemplate] as TelegramMessage[]
 
     return result;
