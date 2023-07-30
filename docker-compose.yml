@@ -7,10 +7,6 @@ services:
       target: development
     volumes:
       - .:/usr/src/app
-    environment:
-      - MYSQL_USERNAME=root
-      - MYSQL_DATABASE=populix_bot
-      - MYSQL_ROOT_PASSWORD=  
     env_file:
     - .env
     command: npm run start:dev

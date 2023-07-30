@@ -6,7 +6,7 @@ services:
       - SYS_NICE
     restart: always
     environment:
-      - MYSQL_HOST=docker.local.host
+      - MYSQL_USERNAME=root
       - MYSQL_DATABASE=populix_bot
       - MYSQL_ROOT_PASSWORD=
     ports:
