@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Post, Body, Put } from '@nestjs/common';
 import { WebhookUseCases } from 'src/use-cases/webhook/webhook.use-case';
-import { RequestWebhookDto } from '../core/dtos';
+import { RequestWebhookTextDto } from '../core/dtos';
 
 @Controller('api/webhook')
 export class WebhookController {
@@ -12,8 +12,7 @@ export class WebhookController {
   }
 
   @Post()
-  async postWebhook(@Body() requestBody: RequestWebhookDto) {
-    console.log(requestBody)
+  async postWebhook(@Body() requestBody: any) {
     const handle = await this.webhookUseCases.handle(requestBody);
     return true;
   }

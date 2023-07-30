@@ -18,4 +18,16 @@ export class WebhookFactoryService {
         customer.email = '';
         return customer;
       }
+
+      async createWebhookRequestBody(webhook: any): Promise<RequestWebhookDto> {
+        if (webhook.callback_query) {
+          const webhookBody = new RequestWebhookDto();
+          webhookBody.update_id = webhook.update_id;
+          webhookBody.message = webhook.callback_query.message;
+          webhookBody.chat_instance = webhook.chat_instance;
+          webhookBody.data = webhook.data;
+        }
+
+        return webhook as RequestWebhookDto;
+      }
 }

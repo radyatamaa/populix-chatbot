@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CurrentFormRealm, Customer, Options } from '../../core/entities';
+import { CurrentFormRealm, Customer, Options, PayloadCallbackData } from '../../core/entities';
 import { IDataMysqlServices } from '../../core/abstracts';
-import { RequestWebhookDto } from '../../core/dtos';
+import { RequestWebhookTextDto } from '../../core/dtos';
 import { WebhookFactoryService } from './webhook-factory.service';
 import { CONTENT } from '../../configuration';
 import { CardManagerUseCases } from '../card-manager/card-manager.use-case';
@@ -23,7 +23,9 @@ export class WebhookUseCases {
     private cardManagerUsecase: CardManagerUseCases,
   ) {}
 
- async handle(requestBody: RequestWebhookDto): Promise<any> {
+ async handle(payload: any): Promise<any> {
+    const requestBody = await this.webhookFactoryService.createWebhookRequestBody(payload);
+
     if (!requestBody.message.from.is_bot) {
         const createCustomer = await this.webhookFactoryService.createCustomer(requestBody);
         let customer = await this.dataServices.customers.getWithFilter({
@@ -34,6 +36,15 @@ export class WebhookUseCases {
         if (!customer){
             createCustomer.createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
             customer = await this.dataServices.customers.create(createCustomer)
+        }
+
+        if (requestBody.data) {
+            // const buttonData = JSON.parse(requestBody.data) as PayloadCallbackData
+            // const cards = await this.cardManagerUsecase.getContentCards(String(buttonData.redirect_content_id),{
+            //     contentId: String(buttonData.redirect_content_id)
+            // })
+            // await this.cardManagerUsecase.send(cards,customer, { valueButton: buttonData.value} as Options);
+            return;
         }
         
 

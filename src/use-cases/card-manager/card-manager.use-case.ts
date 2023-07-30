@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Card, CurrentFormRealm, Customer, FormBuilder, FormBuilderSaveToCustomer, Options, QuickReply } from '../../core/entities';
 import { IDataMysqlServices, ITelegramAPIServices, ITheMovieDbAPIServices } from '../../core/abstracts';
-import { RequestWebhookDto } from '../../core/dtos';
+import { RequestWebhookTextDto } from '../../core/dtos';
 import { CardManagerFactoryService } from './card-manager-factory.service';
 import { CONTENT, THE_MOVIE_DB } from 'src/configuration';
 import { InlineKeyboardQR, PayloadCallbackData, ReplyMarkup, TelegramMessage } from 'src/core/entities/telegram.entity';
@@ -152,7 +152,6 @@ export class CardManagerUseCases {
         Overview: ${searchMovie.results[i].overview}
         <a href='${THE_MOVIE_DB.baseUrlImage}${searchMovie.results[i].backdrop_path}'> ‏ </a>
         `;
-        console.log('text',text)
         const cardTemplate = new TelegramMessage();
         cardTemplate.chat_id = customer.telegramId;
         cardTemplate.text = text;

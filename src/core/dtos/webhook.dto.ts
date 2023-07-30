@@ -1,4 +1,4 @@
-export class RequestWebhookDto {
+export class RequestWebhookTextDto {
     update_id: number;
     message: Message;
 }
@@ -28,3 +28,22 @@ export class MessageChat {
     type: string;
 }
 
+export class RequestWebhookButtonDto {
+    update_id: number;
+    callback_query: CallbackQuery;
+    chat_instance: string;
+    data: string;
+}
+
+export class CallbackQuery {
+    id: string;
+    from: MessageFrom;
+    Message: Message;
+}
+
+export class RequestWebhookDto {
+    update_id: number;
+    message: Message;
+    chat_instance: string;
+    data: string;
+}
