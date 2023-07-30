@@ -1,12 +1,28 @@
 version: '3.6'
 services:
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - MYSQL_USERNAME=root
+      - MYSQL_DATABASE=populix_bot
+      - MYSQL_ROOT_PASSWORD=  
+    env_file:
+    - .env
+    command: npm run start:dev
+    ports:
+      - 3000:3000
   db:
     image: mysql:8.0
     cap_add:
       - SYS_NICE
     restart: always
     environment:
-      - MYSQL_HOST=docker.local.host
+      - MYSQL_USERNAME=root
       - MYSQL_DATABASE=populix_bot
       - MYSQL_ROOT_PASSWORD=
     ports:
