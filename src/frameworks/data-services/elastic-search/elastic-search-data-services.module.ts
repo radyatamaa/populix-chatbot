@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
+import { CONFIG_ELASTIC_SEARCH } from 'src/configuration';
 import { IDataElasticSearchServices } from '../../../core';
 
 import { ElasticSearchDataServices } from './elastic-search-data-services.service';
@@ -7,7 +8,7 @@ import { ElasticSearchDataServices } from './elastic-search-data-services.servic
 @Module({
   imports: [
     ElasticsearchModule.register({
-      node: 'http://127.0.0.1:9200',
+      node: CONFIG_ELASTIC_SEARCH.searchConfig.node,
       headers : {
         'content-type':'application/x-ndjson',
       }

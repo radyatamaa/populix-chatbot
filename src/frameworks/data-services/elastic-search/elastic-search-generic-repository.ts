@@ -11,7 +11,6 @@ export class ElasticSearchGenericRepository<T> implements IGenericElasticSearchR
   private _esindex : eSindex;
   private _esService: ElasticsearchService
   constructor(esService: ElasticsearchService,esindex : eSindex){
-    // super(CONFIG_ELASTIC_SEARCH.searchConfig);
     this._esindex = esindex;
     this._esService = esService
   }
@@ -22,7 +21,6 @@ export class ElasticSearchGenericRepository<T> implements IGenericElasticSearchR
   }
 
   async insertIndex(doc: any): Promise<any> {
-    console.log(CONFIG_ELASTIC_SEARCH.searchConfig);
     const data = await this.document(doc)
     return await this._esService.bulk(data)
     .then(res => res)

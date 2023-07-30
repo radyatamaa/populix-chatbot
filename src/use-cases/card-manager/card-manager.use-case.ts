@@ -218,7 +218,6 @@ export class CardManagerUseCases {
     Overview: ${latestMovie.overview}
     <a href='${THE_MOVIE_DB.baseUrlImage}${latestMovie.poster_path}'> ‏ </a>
     `;
-    console.log(`image ${THE_MOVIE_DB.baseUrlImage}${latestMovie.poster_path}`,)
     const cardTemplate = new TelegramMessage();
     cardTemplate.chat_id = customer.telegramId;
     cardTemplate.text = text;

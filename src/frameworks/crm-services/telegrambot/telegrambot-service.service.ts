@@ -17,7 +17,6 @@ export class TelegrambotService implements ITelegramAPIServices {
         data: message
       })
       .then(function (response) {
-        console.log(response.data);
       })
       .catch(function (error) {
         console.error(error);
