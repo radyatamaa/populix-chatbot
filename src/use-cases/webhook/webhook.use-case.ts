@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CurrentFormRealm, Customer, Options, PayloadCallbackData } from '../../core/entities';
 import { IDataMysqlServices } from '../../core/abstracts';
-import { RequestWebhookTextDto } from '../../core/dtos';
+import { RequestWebhookDto, RequestWebhookTextDto } from '../../core/dtos';
 import { WebhookFactoryService } from './webhook-factory.service';
 import { CONTENT } from '../../configuration';
 import { CardManagerUseCases } from '../card-manager/card-manager.use-case';
@@ -27,43 +27,24 @@ export class WebhookUseCases {
     const requestBody = await this.webhookFactoryService.createWebhookRequestBody(payload);
 
     if (!requestBody.message.from.is_bot) {
-        const createCustomer = await this.webhookFactoryService.createCustomer(requestBody);
-        let customer = await this.dataServices.customers.getWithFilter({
-            where: {
-                telegramId: createCustomer.telegramId
-            }
-        })
-        if (!customer){
-            createCustomer.createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
-            customer = await this.dataServices.customers.create(createCustomer)
-        }
+        const customer = await this.customerInit(requestBody);
 
         if (requestBody.data) {
-            // const buttonData = JSON.parse(requestBody.data) as PayloadCallbackData
-            // const cards = await this.cardManagerUsecase.getContentCards(String(buttonData.redirect_content_id),{
-            //     contentId: String(buttonData.redirect_content_id)
-            // })
-            // await this.cardManagerUsecase.send(cards,customer, { valueButton: buttonData.value} as Options);
+            await this.handleButton(requestBody,customer);
             return;
         }
         
 
         if (customer.currentFormRealm) {
-            const currentFormRealm = JSON.parse(customer.currentFormRealm) as CurrentFormRealm;
-            const cards = await this.dataServices.cards.get( String(currentFormRealm.card_id));
-            await this.cardManagerUsecase.send([cards],customer, { answerFormBuilder: requestBody.message.text} as Options);
-            return;
+            await this.handleFormBuilder(requestBody,customer);
+            return; 
         }
 
         let content = null;
         let cards = null;
         if (customer.phoneNumber == "" || customer.email == "") {
-            const welcomeContentId = CONTENT.welcomeMessageContentId;
-            cards = await this.cardManagerUsecase.getContentCards(welcomeContentId,{
-                contentId: welcomeContentId
-            })
-            await this.cardManagerUsecase.send(cards,customer);
-            return;
+           await this.handleGettingStarted(customer);
+           return;
         }
 
         let textPhase = requestBody.message.text;
@@ -78,11 +59,7 @@ export class WebhookUseCases {
         });
 
         if (content.length == 0) {
-            const defaultContent = CONTENT.defaultResponseContentId;
-            cards = await this.cardManagerUsecase.getContentCards(defaultContent,{
-                contentId: defaultContent
-            })
-            const send = await this.cardManagerUsecase.send(cards,customer);
+            await this.handleDefaultResponse(customer);
             return;
         }
 
@@ -103,5 +80,58 @@ export class WebhookUseCases {
     }
 
     return;
-  }
+ }
+
+ async handleButton(requestBody: RequestWebhookDto, customer: Customer): Promise<any> {
+    const buttonData = JSON.parse(requestBody.data) as PayloadCallbackData
+    const cards = await this.cardManagerUsecase.getContentCards(String(buttonData.redirect_content_id),{
+        contentId: String(buttonData.redirect_content_id)
+    })
+    await this.cardManagerUsecase.send(cards,customer, { valueButton: buttonData.value} as Options);
+    return;
+ }
+
+ async handleFormBuilder(requestBody: RequestWebhookDto, customer: Customer) : Promise<any> {
+    const currentFormRealm = JSON.parse(customer.currentFormRealm) as CurrentFormRealm;
+    const cards = await this.dataServices.cards.get( String(currentFormRealm.card_id));
+    await this.cardManagerUsecase.send([cards],customer, { answerFormBuilder: requestBody.message.text} as Options);
+    return;
+ }
+ 
+ async handleGettingStarted(customer: Customer) : Promise<any> {
+    const welcomeContentId = CONTENT.welcomeMessageContentId;
+    const cards = await this.cardManagerUsecase.getContentCards(welcomeContentId,{
+        contentId: welcomeContentId
+    })
+    await this.cardManagerUsecase.send(cards,customer);
+    return;          
+ }
+
+ async handleDefaultResponse(customer: Customer) : Promise<any> {
+    const defaultContent = CONTENT.defaultResponseContentId;
+    const cards = await this.cardManagerUsecase.getContentCards(defaultContent,{
+        contentId: defaultContent
+    })
+    await this.cardManagerUsecase.send(cards,customer);
+    return;      
+ }
+
+
+ async customerInit (requestBody: RequestWebhookDto) : Promise<Customer> {
+    const createCustomer = await this.webhookFactoryService.createCustomer(requestBody);
+    let customer = await this.dataServices.customers.getWithFilter({
+        where: {
+            telegramId: createCustomer.telegramId
+        }
+    })
+    if (!customer){
+        createCustomer.createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
+        customer = await this.dataServices.customers.create(createCustomer)
+    }
+
+    customer.lastConversation = moment().format('YYYY-MM-DD HH:mm:ss');
+    await this.dataServices.customers.update(String(customer.id),customer)
+    
+    return customer;
+ }
 }

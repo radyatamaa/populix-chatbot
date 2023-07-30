@@ -81,7 +81,7 @@ export class CardManagerUseCases {
     }
     
     for (let i = 0; i < templateCards.length; i++) {
-        const sendMessage = await this.telegramServices.sendMessage(templateCards[i]);
+        await this.telegramServices.sendMessage(templateCards[i]);
     }
 
     return;
@@ -118,7 +118,23 @@ export class CardManagerUseCases {
             break; 
         } 
         case TEMPLATE.listmovielatest: { 
-            cardTemplate = await this.createTemplateText(card, customer);
+            cardTemplate = await this.createTemplateLatestMovie(card, customer,options);
+            break; 
+        } 
+        case TEMPLATE.listmovienowplaying: { 
+            cardTemplate = await this.createTemplateListNowPlayingMovie(card, customer,options);
+            break; 
+        } 
+        case TEMPLATE.listmoviepopular: { 
+            cardTemplate = await this.createTemplateListPopularMovie(card, customer,options);
+            break; 
+        } 
+        case TEMPLATE.listmovietoprated: { 
+            cardTemplate = await this.createTemplateListTopRatedMovie(card, customer,options);
+            break; 
+        } 
+        case TEMPLATE.listmovieupcoming: { 
+            cardTemplate = await this.createTemplateListUpcomingMovie(card, customer,options);
             break; 
         } 
         default: { 
@@ -138,6 +154,11 @@ export class CardManagerUseCases {
 
     const result = [] as TelegramMessage[]
     for (let i = 0; i < searchMovie.results.length; i++){
+
+        if (i == 5){
+            break;
+        }
+
         let genres = [];
 
         for (let ig = 0; ig < searchMovie.results[i].genre_ids.length; ig++){
@@ -150,7 +171,167 @@ export class CardManagerUseCases {
         Popularity: ${searchMovie.results[i].popularity}\n
         Genre: ${genres.join(',')}\n
         Overview: ${searchMovie.results[i].overview}
-        <a href='${THE_MOVIE_DB.baseUrlImage}${searchMovie.results[i].backdrop_path}'> ‏ </a>
+        <a href='${THE_MOVIE_DB.baseUrlImage}${searchMovie.results[i].poster_path}'> ‏ </a>
+        `;
+        const cardTemplate = new TelegramMessage();
+        cardTemplate.chat_id = customer.telegramId;
+        cardTemplate.text = text;
+        cardTemplate.parse_mode = 'HTML';
+
+        result.push(cardTemplate);
+    }
+
+    return result;
+  }
+
+  async createTemplateLatestMovie(card: Card, customer: Customer,options? : Options) : Promise<TelegramMessage[]> {
+    const latestMovie = await this.themovieDbServices.GetLatestMovie();
+
+    let genres = [];
+
+    for (let i = 0; i < latestMovie.genres.length; i++){
+        genres.push(latestMovie.genres[i].name);
+    }
+
+    const text = `Latest Movie\n
+    Name: ${latestMovie.title}\n
+    Release Date: ${latestMovie.release_date}\n
+    Popularity: ${latestMovie.popularity}\n
+    Genre: ${genres.join(',')}\n
+    Overview: ${latestMovie.overview}
+    <a href='${THE_MOVIE_DB.baseUrlImage}${latestMovie.poster_path}'> ‏ </a>
+    `;
+    console.log(`image ${THE_MOVIE_DB.baseUrlImage}${latestMovie.poster_path}`,)
+    const cardTemplate = new TelegramMessage();
+    cardTemplate.chat_id = customer.telegramId;
+    cardTemplate.text = text;
+    cardTemplate.parse_mode = 'HTML';
+
+    const result = [cardTemplate] as TelegramMessage[]
+
+    return result;
+  }
+
+  async createTemplateListNowPlayingMovie(card: Card, customer: Customer,options? : Options) : Promise<TelegramMessage[]> {
+    const movies = await this.themovieDbServices.ListNowPlayingMovie();
+
+    const result = [] as TelegramMessage[]
+    for (let i = 0; i < movies.results.length; i++){
+        if (i == 5){
+            break;
+        }
+        let genres = [];
+
+        for (let ig = 0; ig < movies.results[i].genre_ids.length; ig++){
+            genres.push(GENRE_THE_MOVIE[movies.results[i].genre_ids[ig]]);
+        }
+
+        const text = `Now Playing Movie\n
+        Name: ${movies.results[i].title}\n
+        Release Date: ${movies.results[i].release_date}\n
+        Popularity: ${movies.results[i].popularity}\n
+        Genre: ${genres.join(',')}\n
+        Overview: ${movies.results[i].overview}
+        <a href='${THE_MOVIE_DB.baseUrlImage}${movies.results[i].poster_path}'> ‏ </a>
+        `;
+        const cardTemplate = new TelegramMessage();
+        cardTemplate.chat_id = customer.telegramId;
+        cardTemplate.text = text;
+        cardTemplate.parse_mode = 'HTML';
+
+        result.push(cardTemplate);
+    }
+
+    return result;
+  }
+
+  async createTemplateListPopularMovie(card: Card, customer: Customer,options? : Options) : Promise<TelegramMessage[]> {
+    const movies = await this.themovieDbServices.ListPopularMovie();
+
+    const result = [] as TelegramMessage[]
+    for (let i = 0; i < movies.results.length; i++){
+        if (i == 5){
+            break;
+        }
+        let genres = [];
+
+        for (let ig = 0; ig < movies.results[i].genre_ids.length; ig++){
+            genres.push(GENRE_THE_MOVIE[movies.results[i].genre_ids[ig]]);
+        }
+
+        const text = `Popular Movie\n
+        Name: ${movies.results[i].title}\n
+        Release Date: ${movies.results[i].release_date}\n
+        Popularity: ${movies.results[i].popularity}\n
+        Genre: ${genres.join(',')}\n
+        Overview: ${movies.results[i].overview}
+        <a href='${THE_MOVIE_DB.baseUrlImage}${movies.results[i].poster_path}'> ‏ </a>
+        `;
+        const cardTemplate = new TelegramMessage();
+        cardTemplate.chat_id = customer.telegramId;
+        cardTemplate.text = text;
+        cardTemplate.parse_mode = 'HTML';
+
+        result.push(cardTemplate);
+    }
+
+    return result;
+  }
+
+  async createTemplateListTopRatedMovie(card: Card, customer: Customer,options? : Options) : Promise<TelegramMessage[]> {
+    const movies = await this.themovieDbServices.ListTopRatedMovie();
+
+    const result = [] as TelegramMessage[]
+    for (let i = 0; i < movies.results.length; i++){
+        if (i == 5){
+            break;
+        }
+        let genres = [];
+
+        for (let ig = 0; ig < movies.results[i].genre_ids.length; ig++){
+            genres.push(GENRE_THE_MOVIE[movies.results[i].genre_ids[ig]]);
+        }
+
+        const text = `Top Rated Movie\n
+        Name: ${movies.results[i].title}\n
+        Release Date: ${movies.results[i].release_date}\n
+        Popularity: ${movies.results[i].popularity}\n
+        Genre: ${genres.join(',')}\n
+        Overview: ${movies.results[i].overview}
+        <a href='${THE_MOVIE_DB.baseUrlImage}${movies.results[i].poster_path}'> ‏ </a>
+        `;
+        const cardTemplate = new TelegramMessage();
+        cardTemplate.chat_id = customer.telegramId;
+        cardTemplate.text = text;
+        cardTemplate.parse_mode = 'HTML';
+
+        result.push(cardTemplate);
+    }
+
+    return result;
+  }
+
+  async createTemplateListUpcomingMovie(card: Card, customer: Customer,options? : Options) : Promise<TelegramMessage[]> {
+    const movies = await this.themovieDbServices.ListUpcomingMovie();
+
+    const result = [] as TelegramMessage[]
+    for (let i = 0; i < movies.results.length; i++){
+        if (i == 5){
+            break;
+        }
+        let genres = [];
+
+        for (let ig = 0; ig < movies.results[i].genre_ids.length; ig++){
+            genres.push(GENRE_THE_MOVIE[movies.results[i].genre_ids[ig]]);
+        }
+
+        const text = `Upcoming Movie\n
+        Name: ${movies.results[i].title}\n
+        Release Date: ${movies.results[i].release_date}\n
+        Popularity: ${movies.results[i].popularity}\n
+        Genre: ${genres.join(',')}\n
+        Overview: ${movies.results[i].overview}
+        <a href='${THE_MOVIE_DB.baseUrlImage}${movies.results[i].poster_path}'> ‏ </a>
         `;
         const cardTemplate = new TelegramMessage();
         cardTemplate.chat_id = customer.telegramId;

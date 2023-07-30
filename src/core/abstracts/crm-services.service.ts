@@ -1,5 +1,5 @@
 import { Book, TelegramMessage } from '../entities';
-import { MovieSearchResponse } from '../entities/movie.entity';
+import { LatestMovieResponse, ListMovieNowPlayingResponse, ListMoviePopularResponse, ListMovieTopRatedResponse, ListMovieUpcomingResponse, MovieSearchResponse } from '../entities/movie.entity';
 
 export abstract class ICrmServices {
   abstract bookAdded(book: Book): Promise<boolean>;
@@ -11,4 +11,9 @@ export abstract class ITelegramAPIServices {
 
 export abstract class ITheMovieDbAPIServices {
   abstract SearchMovie(movieName: string): Promise<MovieSearchResponse>;
+  abstract GetLatestMovie(): Promise<LatestMovieResponse>;
+  abstract ListNowPlayingMovie(): Promise<ListMovieNowPlayingResponse>;
+  abstract ListPopularMovie(): Promise<ListMoviePopularResponse>;
+  abstract ListTopRatedMovie(): Promise<ListMovieTopRatedResponse>;
+  abstract ListUpcomingMovie(): Promise<ListMovieUpcomingResponse>;
 }

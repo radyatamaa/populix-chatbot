@@ -24,8 +24,10 @@ export class WebhookFactoryService {
           const webhookBody = new RequestWebhookDto();
           webhookBody.update_id = webhook.update_id;
           webhookBody.message = webhook.callback_query.message;
-          webhookBody.chat_instance = webhook.chat_instance;
-          webhookBody.data = webhook.data;
+          webhookBody.message.from = webhook.callback_query.from;
+          webhookBody.chat_instance = webhook.callback_query.chat_instance;
+          webhookBody.data = webhook.callback_query.data;
+          return webhookBody;
         }
 
         return webhook as RequestWebhookDto;
