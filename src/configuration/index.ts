@@ -14,8 +14,8 @@ const {
   CONTENT_DEFAULT_RESPONSE_CONTENT_ID,
   TELEGRAM_TOKEN_BOT,
   THE_MOVIE_DB_API_BASE_URL_IMAGE,
-  THE_MOVIE_DB_API_TOKEN
-
+  THE_MOVIE_DB_API_TOKEN,
+  ELASTIC_SEARCH_URL,
 } = process.env
 
 export const DATA_BASE_CONFIGURATION = {
@@ -49,3 +49,24 @@ export const THE_MOVIE_DB = {
   token: THE_MOVIE_DB_API_TOKEN,
   baseUrlImage: THE_MOVIE_DB_API_BASE_URL_IMAGE
 };
+
+export const CONFIG_ELASTIC_SEARCH = {
+  searchConfig: {
+    node: ELASTIC_SEARCH_URL,
+    maxRetries: 5,
+    requestTimeout: 60000,
+    sniffOnStart: true,
+  }
+}
+
+export class ConfigSearch {
+  public static searchConfig(): any {
+    return {
+      node: ELASTIC_SEARCH_URL,
+      maxRetries: 5,
+      requestTimeout: 60000,
+      sniffOnStart: true,
+    };
+  }
+}
+  

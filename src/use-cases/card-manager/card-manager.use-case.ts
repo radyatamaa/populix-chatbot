@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Card, CurrentFormRealm, Customer, FormBuilder, FormBuilderSaveToCustomer, Options, QuickReply } from '../../core/entities';
-import { IDataMysqlServices, ITelegramAPIServices, ITheMovieDbAPIServices } from '../../core/abstracts';
+import { ChatHistory,ChatHistoryMessages ,Card, CurrentFormRealm, Customer, FormBuilder, FormBuilderSaveToCustomer, Options, QuickReply } from '../../core/entities';
+import { IDataElasticSearchServices, IDataMysqlServices, ITelegramAPIServices, ITheMovieDbAPIServices } from '../../core/abstracts';
 import { RequestWebhookTextDto } from '../../core/dtos';
 import { CardManagerFactoryService } from './card-manager-factory.service';
 import { CONTENT, THE_MOVIE_DB } from 'src/configuration';
 import { InlineKeyboardQR, PayloadCallbackData, ReplyMarkup, TelegramMessage } from 'src/core/entities/telegram.entity';
+import { v4 as uuid } from 'uuid';
+import * as moment from 'moment';
 
 export const TEMPLATE = {
     text:'text',
@@ -71,10 +73,11 @@ export class CardManagerUseCases {
       private cardManagerFactoryService: CardManagerFactoryService,
       private telegramServices: ITelegramAPIServices,
       private themovieDbServices: ITheMovieDbAPIServices,
+      private esDataServices: IDataElasticSearchServices,
     ) {}
 
  async send(cards: Card[],customer: Customer, options? : Options): Promise<any> {
-    const templateCards = [];
+    const templateCards = [] as TelegramMessage[];
     for (let i = 0; i < cards.length; i++) {
         const templateCard = await this.createTemplateCard(cards[i],customer,options);
         templateCards.push(...templateCard);
@@ -82,6 +85,20 @@ export class CardManagerUseCases {
     
     for (let i = 0; i < templateCards.length; i++) {
         await this.telegramServices.sendMessage(templateCards[i]);
+
+        let chatHistory = {
+            id: uuid(),
+            dateTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+            isFromBot: true,
+            telegramId: String(templateCards[i].chat_id),
+            messages: JSON.stringify({text: templateCards[i].text} as ChatHistoryMessages)
+        } as ChatHistory
+
+        if (templateCards[i].reply_markup) {
+            chatHistory.messages = JSON.stringify({text: templateCards[i].text , quickReplies : JSON.stringify(templateCards[i].reply_markup.inline_keyboard)} as ChatHistoryMessages)
+        }
+
+        await this.esDataServices.chatHistory.insertIndex(chatHistory);
     }
 
     return;

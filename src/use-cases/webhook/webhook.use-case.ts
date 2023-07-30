@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CurrentFormRealm, Customer, Options, PayloadCallbackData } from '../../core/entities';
-import { IDataMysqlServices } from '../../core/abstracts';
+import { ChatHistory, ChatHistoryMessages, CurrentFormRealm, Customer, Options, PayloadCallbackData } from '../../core/entities';
+import { IDataElasticSearchServices, IDataMysqlServices } from '../../core/abstracts';
 import { RequestWebhookDto, RequestWebhookTextDto } from '../../core/dtos';
 import { WebhookFactoryService } from './webhook-factory.service';
 import { CONTENT } from '../../configuration';
 import { CardManagerUseCases } from '../card-manager/card-manager.use-case';
 import * as moment from 'moment'
 import {Like} from "typeorm";
+import { v4 as uuid } from 'uuid';
 
 const {
     col: sequelizeCol,
@@ -21,10 +22,12 @@ export class WebhookUseCases {
     private dataServices: IDataMysqlServices,
     private webhookFactoryService: WebhookFactoryService,
     private cardManagerUsecase: CardManagerUseCases,
+    private esDataServices: IDataElasticSearchServices,
   ) {}
 
  async handle(payload: any): Promise<any> {
     const requestBody = await this.webhookFactoryService.createWebhookRequestBody(payload);
+
 
     if (!requestBody.message.from.is_bot) {
         const customer = await this.customerInit(requestBody);
@@ -34,7 +37,8 @@ export class WebhookUseCases {
             return;
         }
         
-
+        await this.handleHistoryMessage(requestBody,customer);
+        
         if (customer.currentFormRealm) {
             await this.handleFormBuilder(requestBody,customer);
             return; 
@@ -76,12 +80,24 @@ export class WebhookUseCases {
             textPhase: requestBody.message.text
         } as Options);
 
-
+        return;
     }
-
+    
     return;
  }
 
+ async handleHistoryMessage(requestBody: RequestWebhookDto, customer: Customer) {
+    let chatHistory = {
+        id: uuid(),
+        dateTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+        isFromBot: false,
+        telegramId: customer.telegramId,
+        messages: JSON.stringify({text: requestBody.message.text} as ChatHistoryMessages)
+    } as ChatHistory
+
+    await this.esDataServices.chatHistory.insertIndex(chatHistory);
+ }
+ 
  async handleButton(requestBody: RequestWebhookDto, customer: Customer): Promise<any> {
     const buttonData = JSON.parse(requestBody.data) as PayloadCallbackData
     const cards = await this.cardManagerUsecase.getContentCards(String(buttonData.redirect_content_id),{

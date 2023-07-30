@@ -1,5 +1,5 @@
-import { Author, Book, Genre, Customer, Content,Card,CardType } from '../entities';
-import { IGenericMysqlRepository, IGenericRepository } from './generic-repository.abstract';
+import { Author, Book, Genre, Customer, Content,Card,CardType,ChatHistory } from '../entities';
+import { IGenericElasticSearchRepository, IGenericMysqlRepository, IGenericRepository } from './generic-repository.abstract';
 
 export abstract class IDataServices {
   abstract authors: IGenericRepository<Author>;
@@ -18,4 +18,10 @@ export abstract class IDataMysqlServices {
   abstract cards: IGenericMysqlRepository<Card>;
 
   abstract cardTypes: IGenericMysqlRepository<CardType>;
+}
+
+export abstract class IDataElasticSearchServices {
+
+  abstract chatHistory: IGenericElasticSearchRepository<ChatHistory>;
+
 }

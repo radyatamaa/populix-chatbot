@@ -20,3 +20,11 @@ export abstract class IGenericMysqlRepository<T> {
 
   abstract update(id: string, item: T);
 }
+
+export abstract class IGenericElasticSearchRepository<T> {
+  abstract searchIndex(q: any,index: string): Promise<any>;
+
+  abstract insertIndex(doc: any): Promise<any>;
+
+  abstract updateIndex(doc: any): Promise<any>;
+}
