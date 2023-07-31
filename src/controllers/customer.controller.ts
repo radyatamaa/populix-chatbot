@@ -14,7 +14,7 @@ export class CustomerController {
   }
 
   @Get('/conversation/:telegram_id')
-  async getById(@Param('telegram_id') id: number,@Query('limit') limit: number,@Query('offset') offset: number) {
+  async GetConversationCustomer(@Param('telegram_id') id: number,@Query('limit') limit: number,@Query('offset') offset: number) {
     return this.customerUseCases.GetConversationCustomer(id,limit,offset);
   }
 }
