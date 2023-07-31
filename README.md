@@ -126,7 +126,8 @@ cp .env.sample .env
 
 ### How To Run Test
 npm run test
-
+### Record Video Result Test
+https://drive.google.com/file/d/1PqIX-JOWGs-6LOXILWurUzSttC4oOnFC/view?usp=sharing
 ## Authors
 Moh. Radyatama Suryana
 ## Version History
