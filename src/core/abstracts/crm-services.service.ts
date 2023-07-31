@@ -1,9 +1,5 @@
-import { Book, TelegramMessage } from '../entities';
+import { TelegramMessage } from '../entities';
 import { LatestMovieResponse, ListMovieNowPlayingResponse, ListMoviePopularResponse, ListMovieTopRatedResponse, ListMovieUpcomingResponse, MovieSearchResponse } from '../entities/movie.entity';
-
-export abstract class ICrmServices {
-  abstract bookAdded(book: Book): Promise<boolean>;
-}
 
 export abstract class ITelegramAPIServices {
   abstract sendMessage(message: TelegramMessage): Promise<any>;

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Book } from '../../../core/entities';
 import { ITelegramAPIServices, ITheMovieDbAPIServices } from '../../../core/abstracts';
 import { TelegramMessage } from 'src/core/entities/telegram.entity';
 import axios from 'axios';

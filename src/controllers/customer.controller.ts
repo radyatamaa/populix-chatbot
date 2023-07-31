@@ -1,6 +1,5 @@
 import { Controller, Get, Param, Post, Body, Put } from '@nestjs/common';
 import { Query } from '@nestjs/common/decorators';
-import { CreateAuthorDto, UpdateAuthorDto } from '../core/dtos';
 import { CustomerUseCases } from '../use-cases/customer/customer.use-case';
 
 @Controller('api/customer')
