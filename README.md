@@ -124,7 +124,8 @@ cp .env.sample .env
   noted : also you can set the webhook telegram api by postman can import the file collection "Telegram-Bot-api.postman_collection.json"
 ```  
 
-### Installing
+### How To Run Test
+npm run test
 
 ## Authors
 Moh. Radyatama Suryana
