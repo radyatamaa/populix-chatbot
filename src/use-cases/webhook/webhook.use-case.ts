@@ -86,7 +86,7 @@ export class WebhookUseCases {
     return;
  }
 
- async handleHistoryMessage(requestBody: RequestWebhookDto, customer: Customer) {
+ private async handleHistoryMessage(requestBody: RequestWebhookDto, customer: Customer) {
     let chatHistory = {
         id: uuid(),
         dateTime: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -98,7 +98,7 @@ export class WebhookUseCases {
     await this.esDataServices.chatHistory.insertIndex(chatHistory);
  }
  
- async handleButton(requestBody: RequestWebhookDto, customer: Customer): Promise<any> {
+ private async handleButton(requestBody: RequestWebhookDto, customer: Customer): Promise<any> {
     const buttonData = JSON.parse(requestBody.data) as PayloadCallbackData
     const cards = await this.cardManagerUsecase.getContentCards(String(buttonData.redirect_content_id),{
         contentId: String(buttonData.redirect_content_id)
@@ -107,14 +107,14 @@ export class WebhookUseCases {
     return;
  }
 
- async handleFormBuilder(requestBody: RequestWebhookDto, customer: Customer) : Promise<any> {
+ private async handleFormBuilder(requestBody: RequestWebhookDto, customer: Customer) : Promise<any> {
     const currentFormRealm = JSON.parse(customer.currentFormRealm) as CurrentFormRealm;
     const cards = await this.dataServices.cards.get( String(currentFormRealm.card_id));
     await this.cardManagerUsecase.send([cards],customer, { answerFormBuilder: requestBody.message.text} as Options);
     return;
  }
  
- async handleGettingStarted(customer: Customer) : Promise<any> {
+ private async handleGettingStarted(customer: Customer) : Promise<any> {
     const welcomeContentId = CONTENT.welcomeMessageContentId;
     const cards = await this.cardManagerUsecase.getContentCards(welcomeContentId,{
         contentId: welcomeContentId
@@ -123,7 +123,7 @@ export class WebhookUseCases {
     return;          
  }
 
- async handleDefaultResponse(customer: Customer) : Promise<any> {
+ private async handleDefaultResponse(customer: Customer) : Promise<any> {
     const defaultContent = CONTENT.defaultResponseContentId;
     const cards = await this.cardManagerUsecase.getContentCards(defaultContent,{
         contentId: defaultContent
@@ -133,7 +133,7 @@ export class WebhookUseCases {
  }
 
 
- async customerInit (requestBody: RequestWebhookDto) : Promise<Customer> {
+ private async customerInit (requestBody: RequestWebhookDto) : Promise<Customer> {
     const createCustomer = await this.webhookFactoryService.createCustomer(requestBody);
     let customer = await this.dataServices.customers.getWithFilter({
         where: {

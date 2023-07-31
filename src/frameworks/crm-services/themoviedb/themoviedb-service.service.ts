@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ITelegramAPIServices, ITheMovieDbAPIServices } from '../../../core/abstracts';
-import { TelegramMessage } from 'src/core/entities/telegram.entity';
+import { TelegramMessage } from '../../../core/entities/telegram.entity';
 import axios from 'axios';
-import { THE_MOVIE_DB } from 'src/configuration';
-import { LatestMovieResponse, ListMovieNowPlayingResponse, ListMoviePopularResponse, ListMovieTopRatedResponse, ListMovieUpcomingResponse, MovieSearchResponse } from 'src/core/entities/movie.entity';
+import { THE_MOVIE_DB } from '../../../configuration';
+import { LatestMovieResponse, ListMovieNowPlayingResponse, ListMoviePopularResponse, ListMovieTopRatedResponse, ListMovieUpcomingResponse, MovieSearchResponse } from '../../../core/entities/movie.entity';
 
 @Injectable()
 export class TheMovieDbAPIService implements ITheMovieDbAPIServices {

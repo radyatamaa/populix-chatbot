@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ITelegramAPIServices } from '../../../core/abstracts';
-import { TelegramMessage } from 'src/core/entities/telegram.entity';
+import { TelegramMessage } from '../../../core/entities/telegram.entity';
 import axios from 'axios';
-import { TELEGRAM } from 'src/configuration';
+import { TELEGRAM } from '../../../configuration';
 
 @Injectable()
 export class TelegrambotService implements ITelegramAPIServices {

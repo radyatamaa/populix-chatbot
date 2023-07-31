@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Post, Body, Put } from '@nestjs/common';
-import { WebhookUseCases } from 'src/use-cases/webhook/webhook.use-case';
+import { WebhookUseCases } from '../use-cases/webhook/webhook.use-case';
 import { RequestWebhookButtonDto, RequestWebhookTextDto } from '../core/dtos';
 import { ApiTags,ApiBody } from '@nestjs/swagger';
 

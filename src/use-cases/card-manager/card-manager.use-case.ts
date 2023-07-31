@@ -3,8 +3,8 @@ import { ChatHistory,ChatHistoryMessages ,Card, CurrentFormRealm, Customer, Form
 import { IDataElasticSearchServices, IDataMysqlServices, ITelegramAPIServices, ITheMovieDbAPIServices } from '../../core/abstracts';
 import { RequestWebhookTextDto } from '../../core/dtos';
 import { CardManagerFactoryService } from './card-manager-factory.service';
-import { CONTENT, THE_MOVIE_DB } from 'src/configuration';
-import { InlineKeyboardQR, PayloadCallbackData, ReplyMarkup, TelegramMessage } from 'src/core/entities/telegram.entity';
+import { CONTENT, THE_MOVIE_DB } from '../../configuration';
+import { InlineKeyboardQR, PayloadCallbackData, ReplyMarkup, TelegramMessage } from '../../core/entities/telegram.entity';
 import { v4 as uuid } from 'uuid';
 import * as moment from 'moment';
 

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
-import { CONFIG_ELASTIC_SEARCH } from 'src/configuration';
+import { CONFIG_ELASTIC_SEARCH } from '../../../configuration';
 import { IDataElasticSearchServices } from '../../../core';
 
 import { ElasticSearchDataServices } from './elastic-search-data-services.service';

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ChatHistory } from 'src/core';
+import { ChatHistory } from '../../core/entities/chat-history.entity';
 
 @Injectable()
 export class CustomerFactoryService {
