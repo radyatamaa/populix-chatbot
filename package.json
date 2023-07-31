@@ -30,6 +30,7 @@
     "@nestjs/mongoose": "^9.0.2",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/sequelize": "^10.0.0",
+    "@nestjs/swagger": "^7.1.4",
     "@nestjs/typeorm": "^10.0.0",
     "class-validator": "^0.13.2",
     "elasticsearch": "^16.7.3",
