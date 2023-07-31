@@ -22,7 +22,7 @@ export abstract class IGenericMysqlRepository<T> {
 }
 
 export abstract class IGenericElasticSearchRepository<T> {
-  abstract searchIndex(q: any,index: string): Promise<any>;
+  abstract searchIndex(q: any,limit: number,offset: number): Promise<any>;
 
   abstract insertIndex(doc: any): Promise<any>;
 

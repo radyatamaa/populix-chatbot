@@ -15,8 +15,8 @@ export class ElasticSearchGenericRepository<T> implements IGenericElasticSearchR
     this._esService = esService
   }
 
-  async searchIndex(q: any): Promise<any> {
-    const data = await this.searchObject(q);
+  async searchIndex(q: any,limit: number,offset: number): Promise<any> {
+    const data = await this.searchObject(q,limit,offset);
     return this._esService.search(data);
   }
 
@@ -42,20 +42,20 @@ export class ElasticSearchGenericRepository<T> implements IGenericElasticSearchR
   }
 
 
-  private async searchObject(q: any) {
-    const body = await this.elasticSearchBody(q);
+  private async searchObject(q: any,limit: number,offset: number) {
+    const body = await this.elasticSearchBody(q,limit,offset);
     return { index: this._esindex.index, body, q };
   }
 
-  private async elasticSearchBody(q: any): Promise<ElasticSearchBody> {
+  private async elasticSearchBody(q: any,limit: number,offset: number): Promise<ElasticSearchBody> {
     const query = {
       match: {
         url: q
       }
     };
     return new ElasticSearchBody(
-      10,
-      0,
+      limit,
+      offset,
       query
     );
   }

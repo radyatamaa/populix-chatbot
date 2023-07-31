@@ -10,7 +10,8 @@ import { ElasticSearchDataServices } from './elastic-search-data-services.servic
     ElasticsearchModule.register({
       node: CONFIG_ELASTIC_SEARCH.searchConfig.node,
       headers : {
-        'content-type':'application/x-ndjson',
+        // 'content-type':'application/x-ndjson',
+        'content-type':'application/json',
       }
     })
   ],

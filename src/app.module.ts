@@ -13,6 +13,8 @@ import { GenreUseCasesModule } from './use-cases/genre/genre-use-cases.module';
 import { CrmServicesModule } from './services/crm-services/crm-services.module';
 import { CardManagerUseCasesModule } from './use-cases/card-manager/card-manager-cases.module';
 import { WebhookUseCasesModule } from './use-cases/webhook/webhook-cases.module';
+import { CustomerUseCasesModule } from './use-cases/customer/customer-cases.module';
+import { CustomerController } from './controllers/customer.controller';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { WebhookUseCasesModule } from './use-cases/webhook/webhook-cases.module'
     CrmServicesModule,
     CardManagerUseCasesModule,
     WebhookUseCasesModule,
+    CustomerUseCasesModule
   ],
   controllers: [
     AppController,
@@ -30,6 +33,7 @@ import { WebhookUseCasesModule } from './use-cases/webhook/webhook-cases.module'
     AuthorController,
     GenreController,
     WebhookController,
+    CustomerController
   ],
   providers: [],
 })
