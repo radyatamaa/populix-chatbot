@@ -16,6 +16,7 @@ export class WebhookFactoryService {
         customer.lastConversation =  moment().format('YYYY-MM-DD HH:mm:ss');
         customer.phoneNumber = '';
         customer.email = '';
+        customer.currentFormRealm = '';
         return customer;
       }
 

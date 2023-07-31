@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "9f8333ff-956f-43d2-9f55-b3e3f9b6628e",
+		"name": "Telegram Bot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16511873"
+	},
+	"item": [
+		{
+			"name": "Set Webhook",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.telegram.org/bot6613201763:AAFANdUf61n5qfL9e_nlFq87FAKOhYsMZfY/setWebhook?url=https://1d5d-180-251-183-24.ngrok-free.app/api/webhook",
+					"protocol": "https",
+					"host": [
+						"api",
+						"telegram",
+						"org"
+					],
+					"path": [
+						"bot6613201763:AAFANdUf61n5qfL9e_nlFq87FAKOhYsMZfY",
+						"setWebhook"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "https://1d5d-180-251-183-24.ngrok-free.app/api/webhook"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get info Webhook",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.telegram.org/bot6613201763:AAFANdUf61n5qfL9e_nlFq87FAKOhYsMZfY/getWebhookInfo",
+					"protocol": "https",
+					"host": [
+						"api",
+						"telegram",
+						"org"
+					],
+					"path": [
+						"bot6613201763:AAFANdUf61n5qfL9e_nlFq87FAKOhYsMZfY",
+						"getWebhookInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Message",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chat_id\": \"1170450007\",\r\n    \"text\": \"test botton\",\r\n    \"parse_mode\": \"\",\r\n    \"reply_markup\": {\r\n        \"inline_keyboard\": [\r\n            [\r\n                {\r\n                    \"text\": \"Some button text 1\",\r\n                    \"callback_data\": \"1\"\r\n                }\r\n            ]\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.telegram.org/bot6613201763%3AAAFANdUf61n5qfL9e_nlFq87FAKOhYsMZfY/sendMessage",
+					"protocol": "https",
+					"host": [
+						"api",
+						"telegram",
+						"org"
+					],
+					"path": [
+						"bot6613201763%3AAAFANdUf61n5qfL9e_nlFq87FAKOhYsMZfY",
+						"sendMessage"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
