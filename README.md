@@ -1,4 +1,4 @@
-# populix-chatbot-technical-test
+# populix-chatbot
 ## Clean Architecture With NestJS
 ## Description
 It's been a while since my last article on [how to implement clean architecture on Node.js applications](https://betterprogramming.pub/node-clean-architecture-deep-dive-ab68e523554b), [git repo](https://github.com/royib/clean-architecture-node).
