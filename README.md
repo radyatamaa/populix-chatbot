@@ -86,10 +86,10 @@ step-by-step.
 ```bash
 #move to directory
 # Clone into YOUR dir
-git clone https://github.com/radyatamaa/populix-chatbot-technical-test.git
+git clone https://github.com/radyatamaa/populix-chatbot.git
 
 #move to project
-cd populix-chatbot-technical-test
+cd populix-chatbot
 
 # install package
 npm install
